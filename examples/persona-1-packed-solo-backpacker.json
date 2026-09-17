@@ -1,0 +1,570 @@
+{
+  "request": {
+    "destination": "goa",
+    "origin_city": "mumbai",
+    "start_date": null,
+    "start_month": 11,
+    "nights": 3,
+    "traveller_type": "solo",
+    "party": {
+      "adults": 1,
+      "children": 0
+    },
+    "interests": [
+      "beaches",
+      "adventure",
+      "nightlife"
+    ],
+    "pace": "packed",
+    "budget_level": "budget",
+    "dietary_preference": "none",
+    "needs_wheelchair_access": false
+  },
+  "itinerary": {
+    "request_id": "835c78ec0595479b99fb561c8ac87047",
+    "trip_request": {
+      "destination": "goa",
+      "origin_city": "mumbai",
+      "start_date": null,
+      "start_month": 11,
+      "nights": 3,
+      "traveller_type": "solo",
+      "party": {
+        "adults": 1,
+        "children": 0
+      },
+      "interests": [
+        "beaches",
+        "adventure",
+        "nightlife"
+      ],
+      "pace": "packed",
+      "budget_level": "budget",
+      "dietary_preference": "none",
+      "needs_wheelchair_access": false
+    },
+    "days": [
+      {
+        "day_number": 1,
+        "date": null,
+        "zone": "panaji",
+        "theme": "Panaji beaches",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-way-89923159",
+            "name": "Odxel",
+            "category": "beach",
+            "lat": 15.453577,
+            "lon": 73.8300142,
+            "start_time": "11:22",
+            "end_time": "13:22",
+            "visit_duration_minutes": 120,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in beaches; highly rated (4.8). 22 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-way-89923159",
+              "travel_minutes": 22,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Lunch \u2014 local eateries in Panaji (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "13:32",
+            "end_time": "14:32",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Lunch break: a convenient break that keeps you in Panaji.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-89923159",
+              "to_place_id": "meal-day-lunch",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-317708710",
+            "name": "Jogger's Park, La Campala Colony",
+            "category": "park_nature",
+            "lat": 15.4846245,
+            "lon": 73.8142244,
+            "start_time": "14:45",
+            "end_time": "16:15",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.8). 13 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-89923159",
+              "to_place_id": "osm-way-317708710",
+              "travel_minutes": 13,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "curated-acabcc3fc3",
+            "name": "Fontainhas Heritage Quarter",
+            "category": "museum_heritage",
+            "lat": 15.4954,
+            "lon": 73.8292,
+            "start_time": "16:24",
+            "end_time": "17:54",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.8). 9 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-317708710",
+              "to_place_id": "curated-acabcc3fc3",
+              "travel_minutes": 9,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Dinner \u2014 local eateries in Panaji (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "19:10",
+            "end_time": "20:25",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Dinner break: a convenient break that keeps you in Panaji.",
+            "travel_leg_before": {
+              "from_place_id": "curated-acabcc3fc3",
+              "to_place_id": "meal-day-dinner",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 64,
+        "day_cost_inr_estimate": 1050
+      },
+      {
+        "day_number": 2,
+        "date": null,
+        "zone": "north_goa",
+        "theme": "North Goa nature",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-node-12731589295",
+            "name": "Mapusa Town Viewpoint",
+            "category": "park_nature",
+            "lat": 15.5957167,
+            "lon": 73.7981828,
+            "start_time": "09:24",
+            "end_time": "10:54",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.8). 24 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-node-12731589295",
+              "travel_minutes": 24,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-1155293983",
+            "name": "Arpora Saturday Night Market",
+            "category": "market",
+            "lat": 15.5671216,
+            "lon": 73.7661097,
+            "start_time": "11:09",
+            "end_time": "12:09",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.6). 15 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-12731589295",
+              "to_place_id": "osm-way-1155293983",
+              "travel_minutes": 15,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-relation-6423947",
+            "name": "Baga Beach",
+            "category": "beach",
+            "lat": 15.5575058,
+            "lon": 73.7504905,
+            "start_time": "12:18",
+            "end_time": "14:18",
+            "visit_duration_minutes": 120,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in beaches; highly rated (4.6). 9 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1155293983",
+              "to_place_id": "osm-relation-6423947",
+              "travel_minutes": 9,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Lunch \u2014 local eateries in North Goa (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "14:28",
+            "end_time": "15:28",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Lunch break: a convenient break that keeps you in North Goa.",
+            "travel_leg_before": {
+              "from_place_id": "osm-relation-6423947",
+              "to_place_id": "meal-day-lunch",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-1210128792",
+            "name": "Pernem Palace",
+            "category": "fort_landmark",
+            "lat": 15.723068,
+            "lon": 73.7957601,
+            "start_time": "16:13",
+            "end_time": "17:28",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.7). 45 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-relation-6423947",
+              "to_place_id": "osm-way-1210128792",
+              "travel_minutes": 45,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-1219803098",
+            "name": "Kerim Dam",
+            "category": "museum_heritage",
+            "lat": 15.6153151,
+            "lon": 74.077138,
+            "start_time": "18:42",
+            "end_time": "20:12",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.6). 74 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1210128792",
+              "to_place_id": "osm-way-1219803098",
+              "travel_minutes": 74,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Dinner \u2014 local eateries in North Goa (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "20:22",
+            "end_time": "21:00",
+            "visit_duration_minutes": 38,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Dinner break: a convenient break that keeps you in North Goa.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1219803098",
+              "to_place_id": "meal-day-dinner",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 187,
+        "day_cost_inr_estimate": 1300
+      },
+      {
+        "day_number": 3,
+        "date": null,
+        "zone": "south_goa",
+        "theme": "South Goa beaches",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-way-1043498139",
+            "name": "Hollant Beach",
+            "category": "beach",
+            "lat": 15.3694987,
+            "lon": 73.8621837,
+            "start_time": "09:55",
+            "end_time": "11:55",
+            "visit_duration_minutes": 120,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in beaches; highly rated (4.8). 55 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-way-1043498139",
+              "travel_minutes": 55,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-1551119166",
+            "name": "Chicalim Bay Windowpane Oyster Conservation Zone",
+            "category": "park_nature",
+            "lat": 15.4042859,
+            "lon": 73.8535416,
+            "start_time": "12:08",
+            "end_time": "13:38",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.8). 13 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1043498139",
+              "to_place_id": "osm-way-1551119166",
+              "travel_minutes": 13,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Lunch \u2014 local eateries in South Goa (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "13:48",
+            "end_time": "14:48",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Lunch break: a convenient break that keeps you in South Goa.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1551119166",
+              "to_place_id": "meal-day-lunch",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-node-11832726683",
+            "name": "Pandav Gufa",
+            "category": "fort_landmark",
+            "lat": 15.0821959,
+            "lon": 74.2065994,
+            "start_time": "16:44",
+            "end_time": "17:59",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.7). 116 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1551119166",
+              "to_place_id": "osm-node-11832726683",
+              "travel_minutes": 116,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Dinner \u2014 local eateries in South Goa (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "19:10",
+            "end_time": "20:25",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Dinner break: a convenient break that keeps you in South Goa.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-11832726683",
+              "to_place_id": "meal-day-dinner",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 204,
+        "day_cost_inr_estimate": 1050
+      },
+      {
+        "day_number": 4,
+        "date": null,
+        "zone": "old_goa",
+        "theme": "Old Goa nature",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-node-12481087740",
+            "name": "Mandovi River Viewpoint",
+            "category": "park_nature",
+            "lat": 15.5018725,
+            "lon": 73.9045076,
+            "start_time": "09:07",
+            "end_time": "10:37",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.8). 7 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-node-12481087740",
+              "travel_minutes": 7,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-1445693940",
+            "name": "Toyyar Lake Notified Wetland",
+            "category": "park_nature",
+            "lat": 15.486925,
+            "lon": 73.8861895,
+            "start_time": "10:47",
+            "end_time": "12:17",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.7). 10 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-12481087740",
+              "to_place_id": "osm-way-1445693940",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "curated-5fee97c2f6",
+            "name": "Basilica of Bom Jesus",
+            "category": "museum_heritage",
+            "lat": 15.5005,
+            "lon": 73.9103,
+            "start_time": "12:28",
+            "end_time": "13:58",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Highly rated (4.7). 11 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1445693940",
+              "to_place_id": "curated-5fee97c2f6",
+              "travel_minutes": 11,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Lunch \u2014 local eateries in Old Goa (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "14:08",
+            "end_time": "15:08",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Lunch break: a convenient break that keeps you in Old Goa.",
+            "travel_leg_before": {
+              "from_place_id": "curated-5fee97c2f6",
+              "to_place_id": "meal-day-lunch",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-node-13801701911",
+            "name": "Gandaulim Fort Ruins",
+            "category": "fort_landmark",
+            "lat": 15.5138377,
+            "lon": 73.9439428,
+            "start_time": "15:21",
+            "end_time": "16:36",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Fits your trip rhythm and route. 13 min drive from the previous stop. fits your packed pace.",
+            "travel_leg_before": {
+              "from_place_id": "curated-5fee97c2f6",
+              "to_place_id": "osm-node-13801701911",
+              "travel_minutes": 13,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 51,
+        "day_cost_inr_estimate": 900
+      }
+    ],
+    "summary": {
+      "total_days": 4,
+      "total_estimated_cost_inr": 4300,
+      "narration": "Your 4-day Goa trip (packed pace, budget budget) leans into beaches, adventure, nightlife. Day 1: Panaji beaches with 3 stops. Day 2: North Goa nature with 5 stops. Day 3: South Goa beaches with 3 stops. Day 4: Old Goa nature with 4 stops."
+    },
+    "assumptions": [
+      "22 stop(s) have unverified opening hours \u2014 confirm timings locally",
+      "filtered out 142 place(s): over budget (budget tier)",
+      "no verified dinner venue left in North Goa \u2014 generic meal assumed",
+      "no verified dinner venue left in Panaji \u2014 generic meal assumed",
+      "no verified dinner venue left in South Goa \u2014 generic meal assumed",
+      "no verified lunch venue left in North Goa \u2014 generic meal assumed",
+      "no verified lunch venue left in Old Goa \u2014 generic meal assumed",
+      "no verified lunch venue left in Panaji \u2014 generic meal assumed",
+      "no verified lunch venue left in South Goa \u2014 generic meal assumed",
+      "skipped Bhagwan Mahaveer Wildlife sanctuary: cannot fit inside its hours on this day",
+      "travel legs are haversine-distance estimates, not live routing",
+      "visit durations, prices and ratings are estimates from OSM + synthetic enrichment \u2014 verify before you go"
+    ]
+  }
+}

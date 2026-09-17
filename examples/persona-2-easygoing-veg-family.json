@@ -1,0 +1,628 @@
+{
+  "request": {
+    "destination": "goa",
+    "origin_city": "delhi",
+    "start_date": null,
+    "start_month": 12,
+    "nights": 5,
+    "traveller_type": "family",
+    "party": {
+      "adults": 2,
+      "children": 2
+    },
+    "interests": [
+      "beaches",
+      "food",
+      "culture"
+    ],
+    "pace": "easy_going",
+    "budget_level": "mid",
+    "dietary_preference": "veg",
+    "needs_wheelchair_access": false
+  },
+  "itinerary": {
+    "request_id": "3a22bee095284ee0811aadadbca842ff",
+    "trip_request": {
+      "destination": "goa",
+      "origin_city": "delhi",
+      "start_date": null,
+      "start_month": 12,
+      "nights": 5,
+      "traveller_type": "family",
+      "party": {
+        "adults": 2,
+        "children": 2
+      },
+      "interests": [
+        "beaches",
+        "food",
+        "culture"
+      ],
+      "pace": "easy_going",
+      "budget_level": "mid",
+      "dietary_preference": "veg",
+      "needs_wheelchair_access": false
+    },
+    "days": [
+      {
+        "day_number": 1,
+        "date": null,
+        "zone": "panaji",
+        "theme": "Panaji food trail",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-node-2603493866",
+            "name": "Bomras",
+            "category": "food",
+            "lat": 15.5070957,
+            "lon": 73.7704169,
+            "start_time": "11:38",
+            "end_time": "12:38",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 700,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in food; highly rated (4.8). Suits your veg diet. 38 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-node-2603493866",
+              "travel_minutes": 38,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-2641264027",
+            "name": "Lunch \u2014 Republic of Noodles",
+            "category": "food",
+            "lat": 15.5145601,
+            "lon": 73.7682671,
+            "start_time": "12:54",
+            "end_time": "13:54",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Republic of Noodles keeps you in Panaji over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-2603493866",
+              "to_place_id": "osm-node-2641264027",
+              "travel_minutes": 16,
+              "mode": "walk"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-2641263855",
+            "name": "Dinner \u2014 Martha's",
+            "category": "food",
+            "lat": 15.5245749,
+            "lon": 73.7609367,
+            "start_time": "19:07",
+            "end_time": "20:22",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Martha's keeps you in Panaji over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-2641264027",
+              "to_place_id": "osm-node-2641263855",
+              "travel_minutes": 7,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 61,
+        "day_cost_inr_estimate": 2300
+      },
+      {
+        "day_number": 2,
+        "date": null,
+        "zone": "north_goa",
+        "theme": "North Goa food trail",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-node-1656629613",
+            "name": "Niwant Fish Hut",
+            "category": "food",
+            "lat": 15.5870434,
+            "lon": 73.8065797,
+            "start_time": "09:19",
+            "end_time": "10:19",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 700,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in food; highly rated (4.8). Suits your veg diet. 19 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-node-1656629613",
+              "travel_minutes": 19,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-relation-6423947",
+            "name": "Baga Beach",
+            "category": "beach",
+            "lat": 15.5575058,
+            "lon": 73.7504905,
+            "start_time": "10:38",
+            "end_time": "12:38",
+            "visit_duration_minutes": 120,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in beaches; highly rated (4.6). 19 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-1656629613",
+              "to_place_id": "osm-relation-6423947",
+              "travel_minutes": 19,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-1210128792",
+            "name": "Pernem Palace",
+            "category": "fort_landmark",
+            "lat": 15.723068,
+            "lon": 73.7957601,
+            "start_time": "13:23",
+            "end_time": "14:38",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in culture; highly rated (4.7). 45 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-relation-6423947",
+              "to_place_id": "osm-way-1210128792",
+              "travel_minutes": 45,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-12155481410",
+            "name": "Lunch \u2014 KashMash",
+            "category": "food",
+            "lat": 15.6198996,
+            "lon": 73.7860431,
+            "start_time": "15:07",
+            "end_time": "16:07",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible KashMash keeps you in North Goa over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1210128792",
+              "to_place_id": "osm-node-12155481410",
+              "travel_minutes": 29,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "curated-ed9485dca0",
+            "name": "Dinner \u2014 Gunpowder",
+            "category": "food",
+            "lat": 15.5859,
+            "lon": 73.7685,
+            "start_time": "19:14",
+            "end_time": "20:29",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Gunpowder keeps you in North Goa over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-12155481410",
+              "to_place_id": "curated-ed9485dca0",
+              "travel_minutes": 14,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 126,
+        "day_cost_inr_estimate": 2550
+      },
+      {
+        "day_number": 3,
+        "date": null,
+        "zone": "south_goa",
+        "theme": "South Goa food trail",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-node-2493493166",
+            "name": "Dropadi",
+            "category": "food",
+            "lat": 15.011419,
+            "lon": 74.0215967,
+            "start_time": "09:41",
+            "end_time": "10:41",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 700,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in food; highly rated (4.8). Suits your veg diet. 41 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-node-2493493166",
+              "travel_minutes": 41,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-way-256543711",
+            "name": "Cola Beach",
+            "category": "beach",
+            "lat": 15.0592023,
+            "lon": 73.96995,
+            "start_time": "11:02",
+            "end_time": "13:02",
+            "visit_duration_minutes": 120,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in beaches; highly rated (4.8). 21 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-2493493166",
+              "to_place_id": "osm-way-256543711",
+              "travel_minutes": 21,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-2630196723",
+            "name": "Lunch \u2014 Fusion",
+            "category": "food",
+            "lat": 15.0352392,
+            "lon": 73.9908387,
+            "start_time": "13:14",
+            "end_time": "14:14",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Fusion keeps you in South Goa over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-256543711",
+              "to_place_id": "osm-node-2630196723",
+              "travel_minutes": 12,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-2630197166",
+            "name": "Dinner \u2014 Rama",
+            "category": "food",
+            "lat": 15.0347138,
+            "lon": 73.9902867,
+            "start_time": "19:06",
+            "end_time": "20:21",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Rama keeps you in South Goa over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-2630196723",
+              "to_place_id": "osm-node-2630197166",
+              "travel_minutes": 6,
+              "mode": "walk"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 80,
+        "day_cost_inr_estimate": 2300
+      },
+      {
+        "day_number": 4,
+        "date": null,
+        "zone": "morjim_ashwem",
+        "theme": "Morjim-Ashwem beaches",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-way-199363593",
+            "name": "Mandrem Beach",
+            "category": "beach",
+            "lat": 15.6600908,
+            "lon": 73.7136985,
+            "start_time": "09:10",
+            "end_time": "11:10",
+            "visit_duration_minutes": 120,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in beaches; highly rated (4.6). 10 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-way-199363593",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-node-3834223757",
+            "name": "Samarat",
+            "category": "food",
+            "lat": 15.685812,
+            "lon": 73.711065,
+            "start_time": "11:21",
+            "end_time": "12:21",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 700,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in food; highly rated (4.8). Suits your veg diet. 11 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-199363593",
+              "to_place_id": "osm-node-3834223757",
+              "travel_minutes": 11,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-node-2195478444",
+            "name": "Banian Tree",
+            "category": "museum_heritage",
+            "lat": 15.70205,
+            "lon": 73.700887,
+            "start_time": "12:30",
+            "end_time": "14:00",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in culture; highly rated (4.7). 9 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-3834223757",
+              "to_place_id": "osm-node-2195478444",
+              "travel_minutes": 9,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-4571639189",
+            "name": "Lunch \u2014 Mandhi",
+            "category": "food",
+            "lat": 15.6875563,
+            "lon": 73.7104327,
+            "start_time": "14:09",
+            "end_time": "15:09",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Mandhi keeps you in Morjim-Ashwem over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-2195478444",
+              "to_place_id": "osm-node-4571639189",
+              "travel_minutes": 9,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-5414471322",
+            "name": "Dinner \u2014 China Garden",
+            "category": "food",
+            "lat": 15.6896437,
+            "lon": 73.7047689,
+            "start_time": "19:13",
+            "end_time": "20:28",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": false,
+            "why": "Veg-compatible China Garden keeps you in Morjim-Ashwem over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-4571639189",
+              "to_place_id": "osm-node-5414471322",
+              "travel_minutes": 13,
+              "mode": "walk"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 52,
+        "day_cost_inr_estimate": 2550
+      },
+      {
+        "day_number": 5,
+        "date": null,
+        "zone": "south_goa",
+        "theme": "South Goa beaches",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-way-1043498139",
+            "name": "Hollant Beach",
+            "category": "beach",
+            "lat": 15.3694987,
+            "lon": 73.8621837,
+            "start_time": "09:47",
+            "end_time": "11:47",
+            "visit_duration_minutes": 120,
+            "indicative_cost_inr": 0,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in beaches; highly rated (4.8). 47 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-way-1043498139",
+              "travel_minutes": 47,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "osm-node-2634447571",
+            "name": "Anoshka",
+            "category": "food",
+            "lat": 15.3541274,
+            "lon": 73.884512,
+            "start_time": "11:58",
+            "end_time": "12:58",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 700,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in food; highly rated (4.8). Suits your veg diet. 11 min drive from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-way-1043498139",
+              "to_place_id": "osm-node-2634447571",
+              "travel_minutes": 11,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-4272046893",
+            "name": "Lunch \u2014 Cafe De Republica",
+            "category": "food",
+            "lat": 15.39201,
+            "lon": 73.86103,
+            "start_time": "13:13",
+            "end_time": "14:13",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Cafe De Republica keeps you in South Goa over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-2634447571",
+              "to_place_id": "osm-node-4272046893",
+              "travel_minutes": 15,
+              "mode": "drive"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": "osm-node-2634447567",
+            "name": "Dinner \u2014 Albert's Place",
+            "category": "food",
+            "lat": 15.3120142,
+            "lon": 73.9017688,
+            "start_time": "19:26",
+            "end_time": "20:41",
+            "visit_duration_minutes": 75,
+            "indicative_cost_inr": 800,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Veg-compatible Albert's Place keeps you in South Goa over mealtime.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-4272046893",
+              "to_place_id": "osm-node-2634447567",
+              "travel_minutes": 26,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 99,
+        "day_cost_inr_estimate": 2300
+      },
+      {
+        "day_number": 6,
+        "date": null,
+        "zone": "old_goa",
+        "theme": "Old Goa food trail",
+        "activities": [
+          {
+            "kind": "place",
+            "place_id": "osm-node-4535189904",
+            "name": "Akshay",
+            "category": "food",
+            "lat": 15.4966958,
+            "lon": 73.9156116,
+            "start_time": "09:15",
+            "end_time": "10:15",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 700,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in food; highly rated (4.8). Suits your veg diet. 15 min walk from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": null,
+              "to_place_id": "osm-node-4535189904",
+              "travel_minutes": 15,
+              "mode": "walk"
+            }
+          },
+          {
+            "kind": "place",
+            "place_id": "curated-5fee97c2f6",
+            "name": "Basilica of Bom Jesus",
+            "category": "museum_heritage",
+            "lat": 15.5005,
+            "lon": 73.9103,
+            "start_time": "10:29",
+            "end_time": "11:59",
+            "visit_duration_minutes": 90,
+            "indicative_cost_inr": 250,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Matches your interest in culture; highly rated (4.7). 14 min walk from the previous stop. kept unhurried for your easy-going pace.",
+            "travel_leg_before": {
+              "from_place_id": "osm-node-4535189904",
+              "to_place_id": "curated-5fee97c2f6",
+              "travel_minutes": 14,
+              "mode": "walk"
+            }
+          },
+          {
+            "kind": "meal",
+            "place_id": null,
+            "name": "Lunch \u2014 local eateries in Old Goa (unverified)",
+            "category": "food",
+            "lat": null,
+            "lon": null,
+            "start_time": "12:10",
+            "end_time": "13:10",
+            "visit_duration_minutes": 60,
+            "indicative_cost_inr": 400,
+            "cost_is_estimate": true,
+            "hours_unverified": true,
+            "why": "Lunch break: no verified veg venue left in Old Goa, so ask the kitchen before ordering (assumption).",
+            "travel_leg_before": {
+              "from_place_id": "curated-5fee97c2f6",
+              "to_place_id": "meal-day-lunch",
+              "travel_minutes": 10,
+              "mode": "drive"
+            }
+          }
+        ],
+        "day_travel_minutes_total": 39,
+        "day_cost_inr_estimate": 1350
+      }
+    ],
+    "summary": {
+      "total_days": 6,
+      "total_estimated_cost_inr": 13350,
+      "narration": "Your 6-day Goa trip (easy going pace, mid budget) leans into beaches, food, culture. Day 1: Panaji food trail with 1 stops. Day 2: North Goa food trail with 3 stops. Day 3: South Goa food trail with 2 stops. Day 4: Morjim-Ashwem beaches with 3 stops. Day 5: South Goa beaches with 2 stops. Day 6: Old Goa food trail with 2 stops."
+    },
+    "assumptions": [
+      "23 stop(s) have unverified opening hours \u2014 confirm timings locally",
+      "filtered out 1 place(s): over budget (mid tier)",
+      "filtered out 35 place(s): unsuitable for the party (family/seniors exclusion)",
+      "filtered out 4 place(s): incompatible with veg diet",
+      "no verified lunch venue left in Old Goa \u2014 generic meal assumed",
+      "travel legs are haversine-distance estimates, not live routing",
+      "veg suitability is inferred from venue data, not verified \u2014 ask the kitchen before ordering",
+      "visit durations, prices and ratings are estimates from OSM + synthetic enrichment \u2014 verify before you go"
+    ]
+  }
+}
