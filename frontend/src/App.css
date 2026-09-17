@@ -1,0 +1,381 @@
+.wishtrip-app {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  color: var(--text-h);
+}
+
+.app-header {
+  margin-bottom: 24px;
+}
+
+.app-header p {
+  color: var(--text);
+}
+
+/* --- Preference form --- */
+
+.preference-form {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.preference-form h2 {
+  margin: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px 16px;
+}
+
+.preference-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.preference-form input[type="text"],
+.preference-form input[type="number"],
+.preference-form input[type="date"],
+.preference-form select {
+  font: inherit;
+  font-weight: 400;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.preference-form fieldset {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px 16px;
+  margin: 0;
+}
+
+.preference-form legend {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 6px;
+}
+
+.optional-tag {
+  font-weight: 400;
+  color: var(--text);
+}
+
+.checkbox-label {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px !important;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 6px !important;
+  font-weight: 400 !important;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.chip input {
+  accent-color: var(--accent);
+}
+
+.chip-active {
+  background: var(--accent-bg);
+  border-color: var(--accent-border) !important;
+}
+
+.chip-hint {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.preference-form button,
+.error-box button,
+.secondary-button {
+  font: inherit;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.preference-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.secondary-button {
+  background: transparent;
+  color: var(--text-h);
+  border-color: var(--border);
+}
+
+.form-error {
+  color: #b91c1c;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* --- Itinerary view --- */
+
+.status-note {
+  color: var(--text);
+  margin-top: 16px;
+}
+
+.error-box {
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-top: 16px;
+}
+
+.itinerary-summary {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.itinerary-summary h2 {
+  margin: 0;
+}
+
+.itinerary-summary p {
+  color: var(--text);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.day-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.day-tab {
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.day-tab-number {
+  font-weight: 700;
+}
+
+.day-tab-theme {
+  font-size: 12px;
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+.day-tab-active {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.day-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .day-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Timeline --- */
+
+.timeline {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.timeline-header h3 {
+  margin: 0 0 4px;
+  text-transform: capitalize;
+}
+
+.timeline-meta {
+  color: var(--text);
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.timeline-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+.timeline-item:first-child {
+  border-top: none;
+}
+
+.timeline-time {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  padding-top: 2px;
+}
+
+.travel-leg {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+
+.activity-name {
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.kind-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-right: 8px;
+  background: var(--code-bg);
+  color: var(--text-h);
+}
+
+.kind-meal {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.activity-meta {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0 0 4px;
+  text-transform: capitalize;
+}
+
+.activity-why {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.activity-flags {
+  font-size: 13px;
+  color: #92400e;
+  margin: 4px 0 0;
+}
+
+/* --- Map --- */
+
+.trip-map {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.map-container {
+  height: 460px;
+  width: 100%;
+}
+
+.map-caption {
+  font-size: 13px;
+  color: var(--text);
+  padding: 8px 16px;
+  margin: 0;
+}
+
+.map-marker {
+  background: var(--accent);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.map-marker-meal {
+  background: #0d9488;
+}
+
+/* --- Assumptions --- */
+
+.assumptions {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-top: 16px;
+}
+
+.assumptions h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.assumptions ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+}
