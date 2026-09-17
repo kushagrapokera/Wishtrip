@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env / secrets
+.env
+*.pem
+
+# SQLite write-ahead logs (the seeded .db itself IS committed)
+*.db-wal
+*.db-shm
+*.db-journal
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Frontend (see frontend/.gitignore for the full list)
+frontend/node_modules/
+frontend/dist/
