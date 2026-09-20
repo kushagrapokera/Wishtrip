@@ -74,12 +74,17 @@ def plan_trip(
     used_place_ids: set[str] = set()
     day_plans: list[DayPlan] = []
     itinerary_assumptions: list[str] = list(exclusion_notes)
+    # Fill helpers may only take leftovers: every clustered id belongs to its
+    # day already, and the day loop schedules those unconditionally.
+    clustered_place_ids: set[str] = {
+        place["id"] for cluster in day_clusters for place in cluster["places"]
+    }
 
     for day_index, cluster in enumerate(day_clusters):
         day_plan = schedule_day_cluster(
             cluster, day_index, len(day_clusters), trip_request,
-            ranked_places, used_place_ids, travel_minutes_fn,
-            itinerary_assumptions,
+            ranked_places, used_place_ids, clustered_place_ids,
+            travel_minutes_fn, itinerary_assumptions,
         )
         day_plans.append(day_plan)
 
@@ -110,6 +115,7 @@ def schedule_day_cluster(
     trip_request: TripRequest,
     ranked_places: list[dict],
     used_place_ids: set[str],
+    clustered_place_ids: set[str],
     travel_minutes_fn: TravelMinutesFn,
     itinerary_assumptions: list[str],
 ) -> DayPlan:
@@ -123,9 +129,9 @@ def schedule_day_cluster(
 
     if cluster.get("is_day_trip"):
         return schedule_day_trip(
-            cluster, day_number, trip_request, visit_date,
-            start_lat, start_lon, used_place_ids, travel_minutes_fn,
-            itinerary_assumptions,
+            cluster, day_number, total_days, trip_request, visit_date,
+            start_lat, start_lon, ranked_places, used_place_ids,
+            clustered_place_ids, travel_minutes_fn, itinerary_assumptions,
         )
 
     ordered_places = day_sequence.build_day_sequence(
@@ -138,7 +144,8 @@ def schedule_day_cluster(
     return schedule_sightseeing_day(
         cluster["zone"], affordable_places, day_number, trip_request, visit_date,
         is_departure_day, start_lat, start_lon, ranked_places,
-        used_place_ids, travel_minutes_fn, itinerary_assumptions,
+        used_place_ids, clustered_place_ids, travel_minutes_fn,
+        itinerary_assumptions,
     )
 
 
@@ -153,6 +160,7 @@ def schedule_sightseeing_day(
     start_lon: float,
     ranked_places: list[dict],
     used_place_ids: set[str],
+    clustered_place_ids: set[str],
     travel_minutes_fn: TravelMinutesFn,
     itinerary_assumptions: list[str],
 ) -> DayPlan:
@@ -196,6 +204,13 @@ def schedule_sightseeing_day(
         scheduler.current_minutes = max(scheduler.current_minutes, 12 * 60)
         scheduler.anchor_meal("lunch", lunch_venue, zone, used_place_ids)
     if needs_dinner and not dinner_placed:
+        is_edge_day = day_number == 1 or is_departure_day
+        day_max_stops, _ = pace_budget.lookup_day_budget(trip_request, is_edge_day)
+        fill_afternoon_gap(
+            scheduler, zone, ranked_places, used_place_ids,
+            clustered_place_ids, day_max_stops,
+        )
+        maybe_insert_rest_block(scheduler, zone)
         scheduler.current_minutes = max(scheduler.current_minutes, DINNER_ANCHOR_MINUTES)
         scheduler.anchor_meal("dinner", dinner_venue, zone, used_place_ids)
 
@@ -209,15 +224,18 @@ def schedule_sightseeing_day(
 def schedule_day_trip(
     cluster: dict,
     day_number: int,
+    total_days: int,
     trip_request: TripRequest,
     visit_date: date | None,
     start_lat: float,
     start_lon: float,
+    ranked_places: list[dict],
     used_place_ids: set[str],
+    clustered_place_ids: set[str],
     travel_minutes_fn: TravelMinutesFn,
     itinerary_assumptions: list[str],
 ) -> DayPlan:
-    """A day-trip venue fills its whole day: no other stops, no anchored meals."""
+    """A day-trip venue leads its day: excursion first, then light nearby stops + dinner."""
     scheduler = DayScheduler(
         trip_request=trip_request,
         visit_date=visit_date,
@@ -230,12 +248,56 @@ def schedule_day_trip(
     )
     day_trip_place = cluster["places"][0]
     scheduler.schedule_place_visit(day_trip_place, used_place_ids, is_day_trip=True)
+    for nearby_place in pick_nearby_evening_stops(
+        day_trip_place, cluster.get("zone", ""), ranked_places,
+        used_place_ids, clustered_place_ids, scheduler.current_lat,
+        scheduler.current_lon, travel_minutes_fn,
+    ):
+        scheduler.schedule_place_visit(nearby_place, used_place_ids)
+    if meal_anchor.should_serve_dinner(day_number == total_days):
+        dinner_venue = meal_anchor.select_meal_venue(
+            [day_trip_place],
+            meal_anchor.meal_candidates_for_zone(ranked_places, cluster.get("zone", "")),
+            used_place_ids,
+        )
+        scheduler.current_minutes = max(scheduler.current_minutes, DINNER_ANCHOR_MINUTES)
+        scheduler.anchor_meal("dinner", dinner_venue, cluster.get("zone", ""), used_place_ids)
     itinerary_assumptions.append(
         f"day {day_number}: {day_trip_place['name']} is a full-day excursion — "
         "carry lunch and confirm transport (assumption)"
     )
     theme = f"{config.ZONE_LABELS.get(cluster['zone'], cluster['zone'])} day trip: {day_trip_place['name']}"
     return scheduler.to_day_plan(day_number, cluster["zone"], theme)
+
+
+def pick_nearby_evening_stops(
+    day_trip_place: dict,
+    zone: str,
+    ranked_places: list[dict],
+    used_place_ids: set[str],
+    clustered_place_ids: set[str],
+    current_lat: float,
+    current_lon: float,
+    travel_minutes_fn: TravelMinutesFn,
+) -> list[dict]:
+    """Up to two light unused same-zone stops nearest the excursion site."""
+    candidates = [
+        place
+        for place in ranked_places
+        if place["id"] not in used_place_ids
+        and place["id"] not in clustered_place_ids
+        and place["id"] != day_trip_place["id"]
+        and place.get("zone") == zone
+        and place.get("category") != config.DAY_TRIP_CATEGORY
+        and place.get("visit_duration_minutes", 60) <= config.DAY_TRIP_EXTRA_MAX_DURATION_MINUTES
+    ]
+    candidates.sort(
+        key=lambda place: (
+            travel_minutes_fn(current_lat, current_lon, place["lat"], place["lon"]),
+            -(place.get("planner_score", 0.0)),
+        )
+    )
+    return candidates[: config.DAY_TRIP_EXTRA_STOPS]
 
 
 class DayScheduler:
@@ -420,6 +482,32 @@ class DayScheduler:
         if place_id is not None:
             self.previous_place_id = place_id
 
+    def anchor_rest_break(self, end_minutes: int, zone: str) -> bool:
+        """Cover a long idle span with explicit unstructured time (no fake venue)."""
+        if end_minutes <= self.current_minutes:
+            return False
+        zone_label = config.ZONE_LABELS.get(zone, zone)
+        self.activities.append(
+            ScheduledActivity(
+                kind="transfer_note",
+                place_id=None,
+                name=f"Free time in {zone_label} — rest at your own pace",
+                category=None,
+                lat=None,
+                lon=None,
+                start_time=format_clock_time(self.current_minutes),
+                end_time=format_clock_time(end_minutes),
+                visit_duration_minutes=end_minutes - self.current_minutes,
+                indicative_cost_inr=0,
+                cost_is_estimate=False,
+                hours_unverified=False,
+                why=explainer.build_why_for_rest_break(zone_label, self.trip_request),
+                travel_leg_before=None,
+            )
+        )
+        self.current_minutes = end_minutes
+        return True
+
     def to_day_plan(self, day_number: int, zone: str, theme: str) -> DayPlan:
         day_travel = sum(
             activity.travel_leg_before.travel_minutes
@@ -465,6 +553,61 @@ def reserve_meal_venues(
         if dinner_venue is not None:
             used_place_ids.add(dinner_venue["id"])
     return lunch_venue, dinner_venue
+
+
+def fill_afternoon_gap(
+    scheduler: DayScheduler,
+    zone: str,
+    ranked_places: list[dict],
+    used_place_ids: set[str],
+    clustered_place_ids: set[str],
+    day_max_stops: int,
+) -> None:
+    """Schedule leftover same-zone light stops into the run-up to dinner.
+
+    Never exceeds the day's pace budget: stops already on the timeline count
+    toward day_max_stops. Only true leftovers are eligible — clustered ids
+    belong to their own days.
+    """
+    for _ in range(config.AFTERNOON_FILL_MAX_STOPS):
+        place_stops = sum(
+            1 for activity in scheduler.activities if activity.kind == "place"
+        )
+        if place_stops >= day_max_stops:
+            return
+        if DINNER_ANCHOR_MINUTES - scheduler.current_minutes < config.REST_MIN_GAP_MINUTES:
+            return
+        candidates = [
+            place
+            for place in ranked_places
+            if place["id"] not in used_place_ids
+            and place["id"] not in clustered_place_ids
+            and place.get("zone") == zone
+            and place.get("category") != config.DAY_TRIP_CATEGORY
+            and place.get("visit_duration_minutes", 60) <= config.AFTERNOON_FILL_MAX_DURATION_MINUTES
+        ]
+        candidates.sort(
+            key=lambda place: (
+                scheduler.travel_minutes_fn(
+                    scheduler.current_lat, scheduler.current_lon,
+                    place["lat"], place["lon"],
+                ),
+                -(place.get("planner_score", 0.0)),
+            )
+        )
+        scheduled_any = False
+        for place in candidates:
+            if scheduler.schedule_place_visit(place, used_place_ids):
+                scheduled_any = True
+                break
+        if not scheduled_any:
+            return
+
+
+def maybe_insert_rest_block(scheduler: DayScheduler, zone: str) -> None:
+    """Turn a remaining long idle span into an explicit rest activity."""
+    if DINNER_ANCHOR_MINUTES - scheduler.current_minutes >= config.REST_MIN_GAP_MINUTES:
+        scheduler.anchor_rest_break(DINNER_ANCHOR_MINUTES, zone)
 
 
 def calculate_visit_date(trip_request: TripRequest, day_index: int) -> date | None:
