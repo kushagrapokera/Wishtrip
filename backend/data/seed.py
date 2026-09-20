@@ -69,7 +69,7 @@ CATEGORY_CAPS = {
     "food": 80,
     "museum_heritage": 70,
     "nightlife": 35,
-    "park_nature": 50,
+    "park_nature": 70,
     "beach": 60,
     "fort_landmark": None,   # keep all
     "market": 20,
@@ -156,9 +156,13 @@ def choose_category(tags: dict) -> str | None:
     generic tourism=attraction fallback, and small shrines are only kept if
     they carry a Wikipedia link (otherwise hundreds of unnamed-local temples
     flood the heritage category).
+
+    Only Dudhsagar-scale falls deserve a full day; every OSM waterfall is a
+    minor cascade, so they map to park_nature (~90 min). The curated
+    Dudhsagar Falls entry keeps its explicit day_trip category.
     """
     if tags.get("waterway") == "waterfall":
-        return "day_trip"
+        return "park_nature"
     for key, value in [
         ("historic", "fort"), ("historic", "castle"), ("historic", "ruins"),
         ("historic", "monument"), ("historic", "memorial"), ("historic", "archaeological_site"),
