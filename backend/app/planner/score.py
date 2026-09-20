@@ -45,6 +45,8 @@ def calculate_party_bonus(place: dict, trip_request: TripRequest) -> float:
         bonus += config.KIDS_OK_BONUS
     if trip_request.traveller_type == "seniors" and place.get("seniors_ok", True):
         bonus += config.SENIORS_OK_BONUS
+    if trip_request.traveller_type == "friends" and place.get("category") == "nightlife":
+        bonus += config.FRIENDS_NIGHTLIFE_BONUS
     return bonus
 
 
@@ -93,4 +95,6 @@ def describe_score_reasons(place: dict, trip_request: TripRequest) -> list[str]:
         reasons.append("kid-friendly for your family")
     if trip_request.traveller_type == "seniors" and place.get("seniors_ok", True):
         reasons.append("comfortable for senior travellers")
+    if trip_request.traveller_type == "friends" and place.get("category") == "nightlife":
+        reasons.append("lively nightlife pick for friends")
     return reasons
