@@ -24,3 +24,7 @@ Thumbs.db
 # Frontend (see frontend/.gitignore for the full list)
 frontend/node_modules/
 frontend/dist/
+---
+# Internal working docs (kept locally, not published)
+AGENTS.md
+plan.md
