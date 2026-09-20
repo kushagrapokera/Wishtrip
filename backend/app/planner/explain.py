@@ -76,3 +76,16 @@ def build_why_for_day_trip(place: dict, trip_request: TripRequest) -> str:
     """Full-day excursions get their own reason: the outing needs the whole day."""
     base_reason = build_why_for_place(place, trip_request)
     return f"A full-day excursion, so the day is kept free for it. {base_reason}"
+
+
+def build_why_for_rest_break(zone_label: str, trip_request: TripRequest) -> str:
+    """Unstructured time is paced downtime, never a dropped scheduling ball."""
+    if trip_request.pace == "easy_going":
+        return (
+            f"Unscheduled time in {zone_label} kept open for your easy-going pace — "
+            "rest, swim or wander at your own rhythm."
+        )
+    return (
+        f"Unscheduled time in {zone_label} — rest or explore at your own pace "
+        "before the next anchored stop."
+    )
