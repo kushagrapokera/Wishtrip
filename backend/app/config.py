@@ -72,6 +72,7 @@ RATING_BONUS_SCALE = 1.0  # max bonus added for a top-rated place
 # Bonus added when a place's suitability matches the party (score.py)
 KIDS_OK_BONUS = 0.3
 SENIORS_OK_BONUS = 0.3
+FRIENDS_NIGHTLIFE_BONUS = 0.3
 
 # Score penalty for outdoor categories during monsoon (score.py demotes,
 # filter.py drops seasonally closed venues outright)
@@ -88,9 +89,17 @@ DAY_END_HOUR = 21  # nothing is scheduled to end after 21:00
 EDGE_DAY_STOP_REDUCTION = 1
 EDGE_DAY_HOURS_FRACTION = 0.6
 
-# A single venue that consumes a whole day (Dudhsagar Falls); such a day
-# holds no other sightseeing stop (cluster.py, budget.py)
+# A single venue that consumes most of a day (Dudhsagar Falls); the day
+# still fits up to two light nearby stops plus dinner afterwards
 DAY_TRIP_CATEGORY = "day_trip"
+DAY_TRIP_EXTRA_STOPS = 2
+DAY_TRIP_EXTRA_MAX_DURATION_MINUTES = 90
+
+# Sightseeing days fill a long idle run-up to dinner with nearby light
+# stops; whatever long gap remains becomes an explicit rest block
+AFTERNOON_FILL_MAX_STOPS = 2
+AFTERNOON_FILL_MAX_DURATION_MINUTES = 90
+REST_MIN_GAP_MINUTES = 120
 
 # Fallback opening window assumed when OSM hours are unknown; the activity
 # is still flagged hours_unverified so the UI states the assumption
