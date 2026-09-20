@@ -5,12 +5,12 @@ day-by-day Goa itinerary. Built for the Wishtrip AI Engineering Internship
 take-home assignment.
 
 **The core idea:** an itinerary is a physically-feasible route through scored
-candidates — not a list of nice places. A deterministic planner (~90% of the
-decisions: rules, scoring, geographic clustering, route sequencing, time
-budgeting) makes every planning choice; the LLM (~10%) only writes narration
-over the finished plan, and the app works fully with the LLM down.
+candidates — not a list of nice places. A deterministic planner makes every
+planning choice (rules, scoring, geographic clustering, route sequencing, time
+budgeting); the LLM only writes narration over the finished plan, and the app
+works fully with the LLM down.
 
-## Quickstart (clean setup)
+## Quickstart
 
 Requires conda (backend) and Node 18+ (frontend).
 
@@ -21,6 +21,11 @@ conda activate wishtrip
 
 # 2. Database (ships seeded; rebuild only if you want fresh OSM data)
 python backend/data/seed.py   # uses cached Overpass response, no network needed
+
+# Inspect the seeded database
+sqlite3 backend/data/wishtrip.db ".tables"
+sqlite3 backend/data/wishtrip.db "SELECT category, COUNT(*) FROM places GROUP BY category;"
+sqlite3 backend/data/wishtrip.db "SELECT name, category, zone FROM places WHERE price_level = 3;"
 
 # 3. Backend API (http://localhost:8000, docs at /docs)
 python -m uvicorn app.main:app --app-dir backend
@@ -33,8 +38,8 @@ Optional LLM narration: `export WISHTRIP_LLM_API_KEY=…`
 (optional `WISHTRIP_LLM_BASE_URL`, `WISHTRIP_LLM_MODEL`, default OpenAI-compatible).
 Without a key the API returns complete itineraries with template prose.
 
-Verify: `pytest` from `backend/` (23 tests), `npm run typecheck && npm run build`
-from `frontend/`.
+Verify: `conda run -n wishtrip python -m pytest -q` from `backend/` (31 tests),
+`npm run typecheck && npm run build` from `frontend/`.
 
 ## Architecture
 
@@ -53,148 +58,230 @@ planner/narrate.py — LLM prose over the final plan, fail-open to templates
 
 Boundaries that are load-bearing, not decorative:
 
-- All planning logic lives in `backend/app/planner/` as **pure functions** —
-  the FastAPI layer only loads data and the DB layer only stores it.
+- All planning logic lives in `backend/app/planner/` as pure functions.
+  The FastAPI layer only loads data and the DB layer only stores it.
 - Pipeline order is fixed: filter → score → cluster → sequence → pace-budget →
-  explanations. Downstream steps never re-decide upstream ones.
-- **The LLM never makes planning decisions** (no adding/removing/reordering).
+  meals → explanations → narration. 
+- The LLM never makes planning decisions (no adding, removing, or reordering).
   Its prose is validated (must mention every scheduled stop by name) and any
   failure falls back to template text.
 - The frontend renders only the structured response; it works with narration
-  on or off.
+  on or off. Origin city is collected (assignment requirement) but does not
+  affect planning; Day 1 always starts at the fixed Goa airport anchor.
 
-## Technology choices
+## How the data is collected and generated
 
-| Layer | Choice | Why |
-|---|---|---|
-| Backend | Python + FastAPI | Planning is array/graph manipulation; Pydantic contracts double as docs |
-| Data | SQLite via SQLAlchemy | Zero-setup, committable `.db`, satisfies "database or data layer" |
-| Planner | Pure Python, no framework | Testable without DB/network; 23 focused tests |
-| LLM | One OpenAI-compatible call behind an interface | Narration only; swappable, mockable, env-var driven |
-| Frontend | React + Vite + TypeScript | Typed mirror of the Pydantic contract; single fetch module |
-| Map | Leaflet + OpenStreetMap tiles | Free, no API key; numbered markers in route order |
-| Geo data | Overpass API (cached) + Nominatim-style anchors | Free/open; no vendor keys, billing, or data-ownership terms |
+Destination is Goa, India: beaches, food, culture (Old Goa churches, forts),
+nature (spice farms, waterfalls), wellness, adventure, nightlife, plus real
+zones (North/South Goa, Panaji, Old Goa, Morjim-Ashwem) that make geographic
+day-clustering meaningful.
 
-## Data model & sources
+Collection happens in `backend/data/seed.py`:
 
-**Destination: Goa, India** — one destination in depth: beaches, food, culture
-(Old Goa churches, forts), nature (spice farms, waterfalls), wellness,
-adventure, nightlife, plus real zones (North/South Goa, Panaji, Old Goa,
-Morjim-Ashwem) that make geographic day-clustering meaningful.
+1. Fetch POIs from OpenStreetMap through the Overpass API for the Goa bounding
+   box. The raw JSON response is cached in `backend/data/cache/` so that we donot encounter any rate limit that are associated with OpenStreetMap API.
+2. Map OSM tags to 10 categories (`choose_category`). Named places without a
+   usable category are dropped.
+3. Added 27 curated famous places that OSM under-represents (wellness,
+   adventure, flagship landmarks), flagged `source: curated` with
+   approximate coordinates.
 
-- **POIs:** OpenStreetMap via the Overpass API (`backend/data/seed.py`; raw
-  response cached in `backend/data/cache/` for rate-limit politeness), mapped
-  from OSM tags to 10 categories, plus 27 curated famous places filling gaps
-  OSM under-represents (wellness, adventure, flagship landmarks).
-- **Enrichment is honestly flagged:** durations, price levels (INR-aware),
-  ratings, suitability and opening-hours parsing are synthetic estimates —
-  every such field is flagged (`cost_is_estimate`, `hours_unverified`) and
-  surfaced in the UI as an assumption, never stated as fact.
-- **`places` table:** id, name, lat/lon, zone, category/subcategory, duration,
-  price_level (0–3), rating, opening_hours JSON, hours_unknown, tags,
-  suitability, kids_ok/seniors_ok, seasonally_closed_months, description, source.
-- **India-specific rules:** monsoon months (Jun–Sep) demote beaches/water
-  activities and close seasonal venues; nightlife excluded for families/seniors.
 
-Current DB: 396 places (`backend/data/wishtrip.db` is committed; re-run
-`seed.py` to rebuild).
+Here is a simpler version that still keeps the technical meaning:
 
-## Planning approach
+### Synthetic Data Generation
 
-1. **Filter** (hard constraints): budget tier → price levels; party exclusions
-   (nightlife needs `kids_ok`, adventure needs `seniors_ok`); seasonal closure;
-   restaurant diet filter (explicit tags, else meat-specialty names only);
-   wheelchair skips treks/water outings.
-2. **Score**: interest→category weights + rating bonus + party bonus −
-   monsoon penalty. Ranked pool per zone.
-3. **Cluster into days**: `nights + 1` single-zone days (North↔South is a real
-   1.5–2 hr crossing); airport-nearest zones on arrival/departure days; full-day
-   excursions (e.g. Dudhsagar) occupy a whole middle day **only if they match
-   an interest**; categories interleaved so days mix food/beach/heritage.
-4. **Sequence**: nearest-neighbour from the day start, then 2-opt on total
-   travel time — through a pluggable estimator (haversine default, offline and
-   test-friendly; Valhalla matrices can drop in).
-5. **Pace-budget + meals**: pace → stops/day + active hours (easy ≈3, balanced
-   ≈4–5, packed ≈6; edge days lighter); overflow drops lowest-scored stops from
-   over-represented categories first; lunch ~13:00 and dinner ~19:00 anchored
-   at diet-compatible in-zone venues.
-6. **Explanations**: every activity carries a `why` derived from the decision
-   (interest match, rating, party/diet fit, travel minutes from previous stop).
+The system generates some **synthetic/enriched data** for places. This data is always marked as an **estimate** and is not treated as verified information.
 
-## Example trips (inputs → visibly different outputs)
+The following fields are generated using **rule-based logic** based on the place's category and name:
 
-Full request+response JSON in `examples/` (template narration — no LLM key set):
+- **Visit duration** – estimated time required to visit the place.
+- **Price level** – estimated cost level using an INR-aware scale from **0 to 3**:
+  - `0` = Free
+  - `1` = Low cost
+  - `2` = Moderate
+  - `3` = Premium
+- **Rating** – a pseudo-rating generated by the rules.
+- **Kids/Seniors suitability** – estimates whether the place is suitable for children and senior citizens.
+- **Seasonal closure** – identifies places that may be closed during certain months.
+- **Diet tags** – estimated food/diet options based on the place category and available information.
 
-1. **`persona-1-packed-solo-backpacker`** — 3 nights, November, beaches +
-   adventure + nightlife, budget: 4 fast days across Panaji/North/South/Old
-   Goa, markets + forts + viewpoints, generic-meal honesty (no budget-tier
-   restaurants in the data).
-2. **`persona-2-easygoing-veg-family`** — 5 nights, December, 2 kids, veg:
-   ≤3 stops/day, zero nightlife, zero waterfall treks (no interest match),
-   Basilica + beaches + veg venues — including one OSM-asserted veg option
-   at a fish-specialty kitchen (explicit diet tags win over name keywords;
-   the diet assumption says to confirm with the kitchen).
-3. **`persona-3-balanced-wellness-couple-monsoon`** — 4 nights, July:
-   Devaaya Ayurveda Retreat surfaces, waterfall day-trip (nature match),
-   beaches demoted, monsoon assumptions flagged.
+These generated values are clearly marked in the system. For example, fields such as `cost_is_estimate` and `hours_unverified` indicate that the information is estimated or has not been verified. The UI also displays these assumptions so that users do not mistake generated data for real-world facts.
 
-## Constraints & assumptions
+### Places Database
 
-- Single destination (Goa) by design — depth over breadth.
-- Travel times are haversine estimates at modest Goa road speeds, not live
-  routing; first/last-mile and traffic are not modelled.
-- Opening hours are only as good as OSM; unverified hours are flagged per
-  activity ("hours not verified").
-- Diet/wheelchair suitability is inferred, not verified — the itinerary says so.
-- "Stays" are out of scope: no hotel data, arrival day simply starts late near
-  the airport.
-- The Goa airport anchor is a constant in `config.py`, not a Nominatim
-  `anchors` table as plan.md Phase 1 sketched — geocoding origin cities was
-  cut as low-value for the prototype (arrival-day logic only needs the
-  airport).
+The `places` table stores information about each place, including:
 
-## Known limitations
+- `id` – unique identifier
+- `name` – place name
+- `lat/lon` – geographical coordinates
+- `zone` – geographical/administrative zone
+- `category/subcategory` – type of place
+- `duration` – estimated visit duration
+- `price_level` – estimated price level from 0–3
+- `rating` – rating value
+- `opening_hours` – opening hours stored as JSON
+- `hours_unknown` – indicates whether opening hours are unknown or unverified
+- `tags` – additional attributes
+- `suitability` – general suitability information
+- `kids_ok` / `seniors_ok` – suitability for children and senior citizens
+- `seasonally_closed_months` – months when a place may be closed
+- `description` – description of the place
+- `source` – source from which the place information was obtained
 
-- 18 minor waterfalls share the `day_trip` category, so long trips can spend
-  two full days on falls; only Dudhsagar-scale venues truly deserve it.
-- 80 food venues can crowd top scores for food-heavy requests (mitigated by
-  the variety interleave + diversity trim, not eliminated).
-- The vegan/vegetarian filter leans on explicit OSM diet tags plus obvious
-  meat-specialty names; mixed-menu kitchens pass with a stated assumption.
-- Frontend has no automated tests (backend carries 23); map popups assume
-  coordinates, which generic meals lack (they are skipped on the map).
+The current database contains **399 places**.
 
-## Alternatives considered
 
-- **Geo MCP servers** (open-streetmap-mcp, valhalla-mcp): useful as *dev
-  tooling* for exploring POIs/routing, but our planner is deterministic code
-  with no agent loop — an MCP hop would add a process and failure mode for no
-  capability gain. Plain HTTP + a pluggable estimator interface instead.
-- **Commercial maps APIs** (Google/Mapbox/Geoapify/Stadia): keys + billing for
-  capabilities free open APIs already cover at prototype fidelity.
-- **LLM-first planning** (prompt wrapping): rejected — untestable constraint
-  handling, silent hallucinations, no "why" traceability. The LLM writes
-  postcards, not plans.
+### Seasonal Rules
 
-## What we'd improve with more time
+The system also applies **season-based rules**:
 
-- **Valhalla upgrade**: real drive/walk matrices behind the existing estimator
-  interface (or Valhalla's TSP replacing hand-rolled 2-opt); isochrones for
-  the arrival-day radius.
-- More destinations through the same pipeline; learned scoring weights from
-  traveller feedback.
-- Structured opening-hours parsing from OSM strings; verified diet/access
-  attributes; frontend tests for the form→timeline→map flow.
+- During the **monsoon months (June–September)**, beaches and water-based activities are **demoted** because weather and accessibility may be less suitable.
+- Places that are known or expected to operate only during certain seasons can be marked as **seasonally closed**.
+- **Nightlife places are excluded from family-oriented recommendations**.
 
-## Project map
+All of these rules are part of the recommendation logic and are treated as system-generated assumptions rather than verified facts.
 
-```
-wishtrip/
-├── backend/app/main.py · models.py · config.py · db.py
-├── backend/app/planner/ (filter score cluster sequence budget meals
-│                         travel_time opening_hours explain narrate
-│                         itinerary_builder)
-├── backend/tests/ (23 tests) · backend/data/seed.py · backend/data/wishtrip.db
-├── backend/environment.yml · backend/requirements.txt
-├── frontend/src/{api,components,hooks} · plan.md · AGENTS.md · examples/
-```
+## Approach to Solve the Problem
+
+The planner takes the user's **destination, origin city, travel dates/month, number of nights, traveller type, group composition, interests, travel pace, budget, and optional diet or mobility requirements**. It then converts this information and the available place data into a **day-by-day, time-based itinerary** using a fixed planning pipeline.
+
+### 1. Apply Hard Filters
+
+The system first removes places that do not satisfy the user's requirements.
+
+- **Budget:** The selected budget tier determines the allowed `price_level`.
+- **Family trips:** Places marked as not suitable for children, such as nightlife venues, are removed.
+- **Senior travellers:** Places marked as unsuitable for seniors, such as certain adventure activities, are removed.
+- **Season:** Places that are seasonally closed during the travel month are removed.
+- **Diet:** Restaurants are filtered using their explicit diet tags. If tags are unavailable, the system falls back to **meat-specialty keywords in the place name**.
+- **Wheelchair accessibility:** Treks and water-based activities are skipped when wheelchair access is required.
+
+Every exclusion is counted by reason so that the system can provide **transparent assumptions** instead of silently removing places.
+
+### 2. Score and Rank Places
+
+After filtering, the remaining places are scored and ranked.
+
+The score is based on:
+
+- **Interest match:** User interests are mapped to place categories using an interest-to-category weight matrix.
+- **Rating bonus:** Higher-rated places receive an additional score.
+- **Party suitability:** Additional points are given when the place matches the group, such as:
+  - Family + kid-friendly
+  - Seniors + senior-friendly
+  - Friends + nightlife
+- **Monsoon penalty:** Beaches and adventure activities receive a lower score during the monsoon season.
+
+Places are sorted by their **total score**, with **rating used as the tiebreaker**.
+
+### 3. Group Places by Zone
+
+The ranked places are divided into `nights + 1` **day groups**, with each day mainly staying within a single geographical zone.
+
+This reduces unnecessary travel because travelling from **North Goa to South Goa can take around 1.5–2 hours**.
+
+The system:
+
+- Cycles through different zones across the days.
+- Pins zones closest to the airport to the **arrival and departure days**.
+- Places full-day excursions mainly in the **middle days**, and only when they match the user's interests.
+- Mixes different categories within a zone so that a day can include **food, beaches, heritage, nature, etc.**
+
+### 4. Sequence Activities
+
+Once places are assigned to days, the system determines their order.
+
+It uses:
+
+- **Nearest-neighbour** to create an initial route.
+- **2-opt optimisation** to improve the total travel time.
+- A **pluggable travel-time estimator**, so the routing logic can be replaced without changing the main planner.
+
+The default estimator uses:
+
+- **Walking** for distances below 1 km.
+- **Driving** for longer distances using estimated Goa road speeds.
+- **Haversine distance** for calculating geographical distance.
+
+Real-world routing matrices can be plugged in later if more accurate travel times are required.
+
+### 5. Add Opening Hours and Timings
+
+Opening hours are applied after the route has been created.
+
+For each stop:
+
+- If the traveller arrives before opening, the itinerary adds **waiting time**.
+- If there is not enough time before closing or the end of the day, the visit is **shortened or skipped**.
+- This converts the ordered list of places into an actual **time-based schedule**.
+
+### 6. Apply Pace Limits
+
+Each day has a maximum number of activities based on the selected travel pace:
+
+- **Easy:** ~3 stops
+- **Balanced:** ~4–5 stops
+- **Packed:** ~6 stops
+
+Arrival and departure days are kept lighter.
+
+If there are too many activities, the system removes the **lowest-scoring stops**, prioritising categories that are already over-represented. This helps maintain variety instead of filling the itinerary with too many similar activities.
+
+### 7. Add Meals and Fill Gaps
+
+The planner uses fixed meal anchors:
+
+- **Lunch:** around 13:00
+- **Dinner:** around 19:00
+- Dinner is not added on the departure day.
+
+Restaurants must match the user's **diet requirements** and preferably remain within the current zone.
+
+If there is a large gap before dinner, the system tries to fill it with suitable leftover **light activities from the same zone**, while respecting the user's pace limit.
+
+If no suitable activity is available, the gap is explicitly shown as a **rest block** rather than leaving unexplained empty time.
+
+### 8. Calculate Costs
+
+Costs are calculated from the estimated **per-adult price** of activities and restaurants.
+
+For group totals:
+
+- Adults pay the full estimated amount.
+- Children are calculated at **50% of the adult cost**.
+
+The system calculates both **daily costs and total trip cost**.
+
+### 9. Generate Explanations
+
+Finally, every activity receives a `why` explanation based on the rules that caused it to be selected.
+
+The explanation can include:
+
+- Interest match
+- Rating
+- Party suitability
+- Diet compatibility
+- Travel time from the previous stop
+- Travel mode
+
+**Narration is generated only after the itinerary is complete.** It explains the already-generated itinerary but does not modify the planning or selection logic.
+
+## Constraints and Limitations
+
+- **Single destination:** The planner currently supports only **Goa**. This is intentional to provide more depth and detail for the assignment instead of supporting multiple destinations.
+
+- **Estimated travel times:** Travel time is calculated using **Haversine distance and estimated road speeds**. It does not use live routing data. Traffic, parking time, and first/last-mile travel are not considered. The planner works **offline**, but the travel estimator can later be replaced with a real routing API or matrix.
+
+- **Opening hours:** Opening hours are mainly sourced from **OSM (OpenStreetMap)** and may be incomplete or outdated. Unverified hours are clearly flagged for each activity and included in the system's assumptions.
+
+
+- **Synthetic place data:** Visit durations, prices, and ratings are **rule-based estimates**, not verified values. For group cost calculations, children are assumed to cost **50% of the adult price**.
+
+- **Accommodation:** Hotel and accommodation planning is currently **out of scope** because no hotel data is included. As a result, arrival days start relatively late and are planned around areas close to the airport. The planner does not recommend hotels.
+
+- **Transport preferences:** Transport mode is currently selected only based on **distance**: walking for short distances and driving for longer ones. User preferences such as "prefer walking" or "avoid driving" are not currently supported.
+
+
+- **Map limitations:** Map markers require valid coordinates. Therefore, generic **meal and rest blocks** without coordinates are not displayed on the map.
