@@ -15,6 +15,7 @@ from app.planner.itinerary_builder import (
     estimate_place_cost_for_party,
     plan_trip,
 )
+from app.planner.score import calculate_party_bonus
 
 NORTH_ZONE = "north_goa"
 SOUTH_ZONE = "south_goa"
@@ -243,7 +244,46 @@ def test_day_trip_poi_occupies_full_day() -> None:
         if any(activity.place_id == "dudhsagar" for activity in day.activities)
     ]
     assert len(falls_days) == 1
-    assert len(place_stops(falls_days[0])) == 1
+    falls_places = place_stops(falls_days[0])
+    assert falls_places[0].place_id == "dudhsagar"
+    assert 1 <= len(falls_places) <= 3
+    assert [activity.place_id for activity in falls_places].count("dudhsagar") == 1
+
+
+def test_day_trip_day_adds_nearby_stops_and_dinner() -> None:
+    day_trip = make_place(
+        "dudhsagar",
+        name="Dudhsagar Falls",
+        category="day_trip",
+        zone=SOUTH_ZONE,
+        lat=15.31,
+        lon=74.31,
+        rating=4.8,
+        visit_duration_minutes=360,
+    )
+    nearby = [
+        make_place(
+            f"south-beach-{i}", zone=SOUTH_ZONE, lat=15.30, lon=74.30,
+            visit_duration_minutes=60,
+        )
+        for i in range(30)
+    ]
+    dinner_spot = make_place(
+        "south-diner", name="South Diner", category="food", zone=SOUTH_ZONE,
+        lat=15.30, lon=74.29, visit_duration_minutes=60,
+    )
+    itinerary = plan_trip(
+        make_request(nights=2, interests=["nature", "food"]), [day_trip] + nearby + [dinner_spot]
+    )
+    falls_days = [
+        day
+        for day in itinerary.days
+        if any(activity.place_id == "dudhsagar" for activity in day.activities)
+    ]
+    assert len(falls_days) == 1
+    kinds = [activity.kind for activity in falls_days[0].activities]
+    assert "meal" in kinds
+    assert len(place_stops(falls_days[0])) >= 2
 
 
 def test_day_trip_without_interest_match_does_not_consume_day() -> None:
@@ -298,3 +338,51 @@ def test_free_places_stay_free_for_family() -> None:
     free_place = make_place("free-beach", price_level=0)
     assert estimate_place_cost_for_party(free_place, family_request) == 0
     assert calculate_group_cost(0, family_request) == 0
+
+
+def test_friends_party_prefers_nightlife_venues() -> None:
+    friends_request = make_request(
+        traveller_type="friends", party={"adults": 3}, interests=["nightlife"]
+    )
+    solo_request = make_request(
+        traveller_type="solo", party={"adults": 3}, interests=["nightlife"]
+    )
+    club = make_place("night-club", category="nightlife", kids_ok=False, rating=4.0)
+    beach = make_place("calm-beach", category="beach", kids_ok=True, rating=4.0)
+    assert calculate_party_bonus(club, friends_request) > calculate_party_bonus(
+        beach, friends_request
+    )
+    assert calculate_party_bonus(club, friends_request) > calculate_party_bonus(
+        club, solo_request
+    )
+
+
+def clock_to_minutes(clock_time: str) -> int:
+    hours, minutes = clock_time.split(":")
+    return int(hours) * 60 + int(minutes)
+
+
+def test_easy_arrival_day_has_no_long_unexplained_gap() -> None:
+    beaches = [
+        make_place(f"panaji-beach-{i}", zone=PANAJI_ZONE, lat=15.49, lon=73.83)
+        for i in range(8)
+    ]
+    diners = [
+        make_place(
+            f"panaji-diner-{i}", name=f"Panaji Diner {i}", category="food",
+            zone=PANAJI_ZONE, lat=15.49, lon=73.84,
+        )
+        for i in range(4)
+    ]
+    itinerary = plan_trip(
+        make_request(
+            pace="easy_going", nights=1, interests=["beaches", "food"],
+            budget_level="premium",
+        ),
+        beaches + diners,
+    )
+    arrival_day = itinerary.days[0]
+    assert any(activity.kind == "meal" for activity in arrival_day.activities)
+    for previous, current in zip(arrival_day.activities, arrival_day.activities[1:]):
+        idle_gap = clock_to_minutes(current.start_time) - clock_to_minutes(previous.end_time)
+        assert idle_gap < 120
