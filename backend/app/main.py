@@ -5,6 +5,16 @@ planner. No planning logic lives here — the API layer only loads data,
 stamps the response id, and maps planner failures to HTTP statuses.
 """
 
+import sys
+from pathlib import Path
+
+# Ensure the backend directory is in sys.path so 'app.*' imports work regardless
+# of whether the process was started from repo root or backend/.
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.insert(0, str(BACKEND_DIR))
+
+
 import uuid
 from contextlib import asynccontextmanager
 
