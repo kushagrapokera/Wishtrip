@@ -15,16 +15,22 @@ if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
 
+import logging
 import uuid
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from .db import init_db, load_all_places
 from .models import ErrorResponse, Itinerary, TripRequest
 from .planner.itinerary_builder import NoSuitablePlacesError, plan_trip
 from .planner.narrate import enrich_itinerary_narration
+
+# Unhandled planner/serialisation failures must be visible in platform logs,
+# otherwise a deployed 500 returns a bare "Internal Server Error" with no cause.
+logger = logging.getLogger("wishtrip.api")
 
 
 @asynccontextmanager
@@ -56,10 +62,21 @@ def health_check() -> dict:
     return {"status": "ok", "places_loaded": place_count}
 
 
+@app.exception_handler(Exception)
+def log_unexpected_failure(request: Request, exc: Exception) -> JSONResponse:
+    """Surface the real cause of a 500 in platform logs instead of a blank 500.
+
+    Returning the exception text is safe for this take-home prototype and is the
+    only way to diagnose a deployed failure; tighten before any real launch.
+    """
+    logger.exception("Unhandled error while serving %s %s", request.method, request.url.path)
+    return JSONResponse(status_code=500, content={"detail": f"{type(exc).__name__}: {exc}"})
+
+
 @app.post(
     "/itineraries",
     response_model=Itinerary,
-    responses={422: {"model": ErrorResponse}},
+    responses={422: {"model": ErrorResponse}, 500: {"model": ErrorResponse}},
 )
 def build_itinerary(trip_request: TripRequest) -> Itinerary:
     """Validate the trip request, plan against SQLite places, return the itinerary."""
