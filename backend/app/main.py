@@ -3,17 +3,12 @@
 Phase 3: the endpoint loads places from SQLite and delegates to the pure
 planner. No planning logic lives here — the API layer only loads data,
 stamps the response id, and maps planner failures to HTTP statuses.
+
+Start the server from inside `backend/` (`uvicorn app.main:app`) so the package
+is imported once as `app.*`. Importing it as `backend.app.*` while `backend/` is
+also on sys.path would load the models twice, and Pydantic would then reject the
+planner's TripRequest as "not an instance of" the response model's TripRequest.
 """
-
-import sys
-from pathlib import Path
-
-# Ensure the backend directory is in sys.path so 'app.*' imports work regardless
-# of whether the process was started from repo root or backend/.
-BACKEND_DIR = Path(__file__).resolve().parent.parent
-if str(BACKEND_DIR) not in sys.path:
-    sys.path.insert(0, str(BACKEND_DIR))
-
 
 import logging
 import uuid

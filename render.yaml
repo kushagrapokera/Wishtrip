@@ -1,0 +1,37 @@
+# Render deployment (both services are free-tier).
+#
+# The backend MUST run with rootDir `backend` so the package imports once as
+# `app.*`. Starting it from the repo root as `backend.app.main:app` loads the
+# Pydantic models twice, and the response model then rejects the planner's
+# TripRequest, producing a 500 on every POST /itineraries.
+services:
+  - type: web
+    name: wishtrip-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      # Optional: enables LLM narration. Unset means template prose, never an error.
+      - key: WISHTRIP_LLM_API_KEY
+        sync: false
+
+  - type: web
+    name: wishtrip-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: wishtrip-api
+          property: host
