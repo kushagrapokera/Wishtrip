@@ -1,6 +1,6 @@
 # Render deployment (both services are free-tier).
 #
-# The backend MUST run with rootDir `backend` so the package imports once as
+# The backend start command must `cd backend` so the package imports once as
 # `app.*`. Starting it from the repo root as `backend.app.main:app` loads the
 # Pydantic models twice, and the response model then rejects the planner's
 # TripRequest, producing a 500 on every POST /itineraries.
@@ -9,9 +9,8 @@ services:
     name: wishtrip-api
     runtime: python
     plan: free
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
